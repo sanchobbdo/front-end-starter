@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<title>Título | Sancho BBDO HTML5</title>
+<!-- Meta Tags -->
+<meta charset="utf-8">
+<meta name="author" content="Sancho BBDO">
+<meta name="description" content="{Escriba la descripción aquí}">
+<meta name="robots" content="all">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Open Graph - http://ogp.me/ -->
+<meta property="og:title" content="{Escriba el título aquí}" />
+<meta property="og:description" content="{Escriba la descripción aquí}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{Escriba el nombre del sitio aquí}"/>
+<meta property="og:url" content="{URL}" />
+<meta property="og:image" content="{URL}" />
+<!-- Favicon y Apple Touch Icon -->
+<link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon-precomposed" href="assets/apple-touch-icon-precomposed.png">
+<!-- Humanstxt.org -->
+<link rel="author" type="text/plain" href="assets/humans.txt">
+<!-- Prefetch DNS assets externos -->
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//www.google-analytics.com">
+<!-- Prefetch web fonts -->
+<link rel="prefetch" href="{FONT_PATH}">
+<!-- CSS -->
+<link rel='stylesheet' href='assets/css/normalize.css'>
+<link rel='stylesheet' href='assets/css/h5bp.css'>
+<link rel='stylesheet' href='assets/css/style.css'>
+
+<!--[if lt IE 9]>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<link media="screen" href="assets/css/ie.css" rel="stylesheet" />
+<![endif]-->
+
+
+        <!-- Hammer reload -->
+          <script>
+            setInterval(function(){
+              try {
+                if(typeof ws != 'undefined' && ws.readyState == 1){return true;}
+                ws = new WebSocket('ws://'+(location.host || 'localhost').split(':')[0]+':35353')
+                ws.onopen = function(){ws.onclose = function(){document.location.reload()}}
+                ws.onmessage = function(){
+                  var links = document.getElementsByTagName('link'); 
+                    for (var i = 0; i < links.length;i++) { 
+                    var link = links[i]; 
+                    if (link.rel === 'stylesheet' && !link.href.match(/typekit/)) { 
+                      href = link.href.replace(/((&|\?)hammer=)[^&]+/,''); 
+                      link.href = href + (href.indexOf('?')>=0?'&':'?') + 'hammer='+(new Date().valueOf());
+                    }
+                  }
+                }
+              }catch(e){}
+            }, 1000)
+          </script>
+        <!-- /Hammer reload -->
+      
+
+</head>
+<body>
+
+<!-- INICIO HEADER -->
+
+<header role="banner">
+<nav role="navigation">
+</nav>
+</header>
+
+<!-- FINAL HEADER -->
+
+<div class="container">
+    <!-- INICIO MAIN CONTENT -->
+    <section role="main">
+    	<!-- @todo Colocar el contenido aquí -->
+    </section>
+    <!-- FINAL MAIN CONTENT -->
+</div>
+
+<!-- INICIO FOOTER -->
+
+<footer role="contentinfo"></footer>
+
+<!-- FINAL FOOTER -->
+
+<!-- INICIO SCRIPTS -->
+
+<!-- Obtiene jQuery del CDN de Google, con opción a cargarlo de un archivo local  -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
+<!-- Scripts concatenados y minificados -->
+<script src='assets/js/plugins.js'></script>
+<script src='assets/js/app.js'></script>
+
+<!-- FINAL SCRIPTS -->
+
+<!-- INICIO ANALYTICS -->
+<!-- Google Analytics: cambie UA-XXXXX-X por el ID del sitio. -->
+<script>
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src='//www.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+<!-- FINAL ANALYTICS -->
+</body>
+</html>
