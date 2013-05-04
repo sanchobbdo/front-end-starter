@@ -1,19 +1,20 @@
 ![image](https://dl.dropboxusercontent.com/u/2402696/external/logo-sancho.png)
 
-HTML5 Starter
+HTML5 Front-end Starter
 ===================================================
 
 - Autor: Adrian Quevedo [adrianquevedo.com](http://adrianquevedo.com)
 - Twitter: [@adrianengine](http://twitter.com/adrianengine)
 
-Purpose
+Propósito
 =======
 
-This is a template made based on H5BP [html5boilerplate.com](http://html5boilerplate.com) can be used as just that, a template to get you going in HTML5.
+Esta es una plantilla basada en H5BP [html5boilerplate.com](http://html5boilerplate.com), se puede usar para iniciar un proyecto en HTML5.
 
-Features
+Características
 ========
 
-- Print CSS included in the main style.css file
-- [Normalize.css](http://necolas.github.com/normalize.css/) is included to normalise CSS across browsers
-- MIT license
+- CSS de impresión incluidos en el archivo style.css principal.
+- [Normalize.css](http://necolas.github.com/normalize.css/) se incluye para normalizar el CSS en los navegadores.
+- Incluye Template para [Hammer](http://hammerformac.com/).
+- Licencia MIT.
