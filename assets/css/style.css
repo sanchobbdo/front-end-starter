@@ -27,11 +27,6 @@ body {
   background: #333333;
   color: #eee; }
 
-/* Sprited Content ----------- */
-.is-sprited {
-  background-image: url(ui-sprite.png);
-  background-repeat: no-repeat; }
-
 /* =2 LINKS
 –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––*/
 a:link,
