@@ -4,8 +4,12 @@ NS.Site = (function(){
 	$(document).on('ready', function(){
 		// @todo Write here the Javascript
 
-		$('#id').on('click',function(e) {
-			//actions
+		// Placeholder Polyfill
+		$('input, textarea').placeholder();
+
+		//Parsley Validation
+		$('form button').on('click',function(e) {
+			$(this).parents('form').parsley( 'validate' );
 			e.preventDefault();
 		});
 
