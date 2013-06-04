@@ -10,7 +10,7 @@ body {
   font: normal 16px "Helvetica Neue", Helvetica, Arial, sans-serif;
   vertical-align: top; }
 
-.container {
+.l-container {
   margin: 0 auto;
   width: 960px; }
 
@@ -71,7 +71,7 @@ a:active {
 
 /*All ----------- */
 @media all {
-  .container {
+  .l-container {
     -webkit-transition: max-width 0.4s ease-in-out;
     -moz-transition: max-width 0.4s ease-in-out;
     transition: max-width 0.4s ease-in-out; } }
