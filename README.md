@@ -14,7 +14,6 @@ Esta es una plantilla basada en H5BP [html5boilerplate.com](http://html5boilerpl
 Características
 ========
 
-- CSS de impresión incluidos en el archivo style.css principal.
 - [Normalize.css](http://necolas.github.com/normalize.css/) se incluye para normalizar el CSS en los navegadores.
 - [Placeholder.js](http://mths.be/placeholder) se incluye para activar el atributo ```placeholder``` en los navegadores que no lo soportan.
 - [Parsley.js](http://parsleyjs.org/) se incluye para validar formularios.
