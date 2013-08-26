@@ -26,158 +26,158 @@
 /*! http://mths.be/placeholder v2.0.7 by @mathias */
 ;(function(window, document, $) {
 
-	var isInputSupported = 'placeholder' in document.createElement('input'),
-	    isTextareaSupported = 'placeholder' in document.createElement('textarea'),
-	    prototype = $.fn,
-	    valHooks = $.valHooks,
-	    hooks,
-	    placeholder;
+  var isInputSupported = 'placeholder' in document.createElement('input'),
+      isTextareaSupported = 'placeholder' in document.createElement('textarea'),
+      prototype = $.fn,
+      valHooks = $.valHooks,
+      hooks,
+      placeholder;
 
-	if (isInputSupported && isTextareaSupported) {
+  if (isInputSupported && isTextareaSupported) {
 
-		placeholder = prototype.placeholder = function() {
-			return this;
-		};
+    placeholder = prototype.placeholder = function() {
+      return this;
+    };
 
-		placeholder.input = placeholder.textarea = true;
+    placeholder.input = placeholder.textarea = true;
 
-	} else {
+  } else {
 
-		placeholder = prototype.placeholder = function() {
-			var $this = this;
-			$this
-				.filter((isInputSupported ? 'textarea' : ':input') + '[placeholder]')
-				.not('.placeholder')
-				.bind({
-					'focus.placeholder': clearPlaceholder,
-					'blur.placeholder': setPlaceholder
-				})
-				.data('placeholder-enabled', true)
-				.trigger('blur.placeholder');
-			return $this;
-		};
+    placeholder = prototype.placeholder = function() {
+      var $this = this;
+      $this
+        .filter((isInputSupported ? 'textarea' : ':input') + '[placeholder]')
+        .not('.placeholder')
+        .bind({
+          'focus.placeholder': clearPlaceholder,
+          'blur.placeholder': setPlaceholder
+        })
+        .data('placeholder-enabled', true)
+        .trigger('blur.placeholder');
+      return $this;
+    };
 
-		placeholder.input = isInputSupported;
-		placeholder.textarea = isTextareaSupported;
+    placeholder.input = isInputSupported;
+    placeholder.textarea = isTextareaSupported;
 
-		hooks = {
-			'get': function(element) {
-				var $element = $(element);
-				return $element.data('placeholder-enabled') && $element.hasClass('placeholder') ? '' : element.value;
-			},
-			'set': function(element, value) {
-				var $element = $(element);
-				if (!$element.data('placeholder-enabled')) {
-					return element.value = value;
-				}
-				if (value == '') {
-					element.value = value;
-					// Issue #56: Setting the placeholder causes problems if the element continues to have focus.
-					if (element != document.activeElement) {
-						// We can't use `triggerHandler` here because of dummy text/password inputs :(
-						setPlaceholder.call(element);
-					}
-				} else if ($element.hasClass('placeholder')) {
-					clearPlaceholder.call(element, true, value) || (element.value = value);
-				} else {
-					element.value = value;
-				}
-				// `set` can not return `undefined`; see http://jsapi.info/jquery/1.7.1/val#L2363
-				return $element;
-			}
-		};
+    hooks = {
+      'get': function(element) {
+        var $element = $(element);
+        return $element.data('placeholder-enabled') && $element.hasClass('placeholder') ? '' : element.value;
+      },
+      'set': function(element, value) {
+        var $element = $(element);
+        if (!$element.data('placeholder-enabled')) {
+          return element.value = value;
+        }
+        if (value == '') {
+          element.value = value;
+          // Issue #56: Setting the placeholder causes problems if the element continues to have focus.
+          if (element != document.activeElement) {
+            // We can't use `triggerHandler` here because of dummy text/password inputs :(
+            setPlaceholder.call(element);
+          }
+        } else if ($element.hasClass('placeholder')) {
+          clearPlaceholder.call(element, true, value) || (element.value = value);
+        } else {
+          element.value = value;
+        }
+        // `set` can not return `undefined`; see http://jsapi.info/jquery/1.7.1/val#L2363
+        return $element;
+      }
+    };
 
-		isInputSupported || (valHooks.input = hooks);
-		isTextareaSupported || (valHooks.textarea = hooks);
+    isInputSupported || (valHooks.input = hooks);
+    isTextareaSupported || (valHooks.textarea = hooks);
 
-		$(function() {
-			// Look for forms
-			$(document).delegate('form', 'submit.placeholder', function() {
-				// Clear the placeholder values so they don't get submitted
-				var $inputs = $('.placeholder', this).each(clearPlaceholder);
-				setTimeout(function() {
-					$inputs.each(setPlaceholder);
-				}, 10);
-			});
-		});
+    $(function() {
+      // Look for forms
+      $(document).delegate('form', 'submit.placeholder', function() {
+        // Clear the placeholder values so they don't get submitted
+        var $inputs = $('.placeholder', this).each(clearPlaceholder);
+        setTimeout(function() {
+          $inputs.each(setPlaceholder);
+        }, 10);
+      });
+    });
 
-		// Clear placeholder values upon page reload
-		$(window).bind('beforeunload.placeholder', function() {
-			$('.placeholder').each(function() {
-				this.value = '';
-			});
-		});
+    // Clear placeholder values upon page reload
+    $(window).bind('beforeunload.placeholder', function() {
+      $('.placeholder').each(function() {
+        this.value = '';
+      });
+    });
 
-	}
+  }
 
-	function args(elem) {
-		// Return an object of element attributes
-		var newAttrs = {},
-		    rinlinejQuery = /^jQuery\d+$/;
-		$.each(elem.attributes, function(i, attr) {
-			if (attr.specified && !rinlinejQuery.test(attr.name)) {
-				newAttrs[attr.name] = attr.value;
-			}
-		});
-		return newAttrs;
-	}
+  function args(elem) {
+    // Return an object of element attributes
+    var newAttrs = {},
+        rinlinejQuery = /^jQuery\d+$/;
+    $.each(elem.attributes, function(i, attr) {
+      if (attr.specified && !rinlinejQuery.test(attr.name)) {
+        newAttrs[attr.name] = attr.value;
+      }
+    });
+    return newAttrs;
+  }
 
-	function clearPlaceholder(event, value) {
-		var input = this,
-		    $input = $(input);
-		if (input.value == $input.attr('placeholder') && $input.hasClass('placeholder')) {
-			if ($input.data('placeholder-password')) {
-				$input = $input.hide().next().show().attr('id', $input.removeAttr('id').data('placeholder-id'));
-				// If `clearPlaceholder` was called from `$.valHooks.input.set`
-				if (event === true) {
-					return $input[0].value = value;
-				}
-				$input.focus();
-			} else {
-				input.value = '';
-				$input.removeClass('placeholder');
-				input == document.activeElement && input.select();
-			}
-		}
-	}
+  function clearPlaceholder(event, value) {
+    var input = this,
+        $input = $(input);
+    if (input.value == $input.attr('placeholder') && $input.hasClass('placeholder')) {
+      if ($input.data('placeholder-password')) {
+        $input = $input.hide().next().show().attr('id', $input.removeAttr('id').data('placeholder-id'));
+        // If `clearPlaceholder` was called from `$.valHooks.input.set`
+        if (event === true) {
+          return $input[0].value = value;
+        }
+        $input.focus();
+      } else {
+        input.value = '';
+        $input.removeClass('placeholder');
+        input == document.activeElement && input.select();
+      }
+    }
+  }
 
-	function setPlaceholder() {
-		var $replacement,
-		    input = this,
-		    $input = $(input),
-		    $origInput = $input,
-		    id = this.id;
-		if (input.value == '') {
-			if (input.type == 'password') {
-				if (!$input.data('placeholder-textinput')) {
-					try {
-						$replacement = $input.clone().attr({ 'type': 'text' });
-					} catch(e) {
-						$replacement = $('<input>').attr($.extend(args(this), { 'type': 'text' }));
-					}
-					$replacement
-						.removeAttr('name')
-						.data({
-							'placeholder-password': true,
-							'placeholder-id': id
-						})
-						.bind('focus.placeholder', clearPlaceholder);
-					$input
-						.data({
-							'placeholder-textinput': $replacement,
-							'placeholder-id': id
-						})
-						.before($replacement);
-				}
-				$input = $input.removeAttr('id').hide().prev().attr('id', id).show();
-				// Note: `$input[0] != input` now!
-			}
-			$input.addClass('placeholder');
-			$input[0].value = $input.attr('placeholder');
-		} else {
-			$input.removeClass('placeholder');
-		}
-	}
+  function setPlaceholder() {
+    var $replacement,
+        input = this,
+        $input = $(input),
+        $origInput = $input,
+        id = this.id;
+    if (input.value == '') {
+      if (input.type == 'password') {
+        if (!$input.data('placeholder-textinput')) {
+          try {
+            $replacement = $input.clone().attr({ 'type': 'text' });
+          } catch(e) {
+            $replacement = $('<input>').attr($.extend(args(this), { 'type': 'text' }));
+          }
+          $replacement
+            .removeAttr('name')
+            .data({
+              'placeholder-password': true,
+              'placeholder-id': id
+            })
+            .bind('focus.placeholder', clearPlaceholder);
+          $input
+            .data({
+              'placeholder-textinput': $replacement,
+              'placeholder-id': id
+            })
+            .before($replacement);
+        }
+        $input = $input.removeAttr('id').hide().prev().attr('id', id).show();
+        // Note: `$input[0] != input` now!
+      }
+      $input.addClass('placeholder');
+      $input[0].value = $input.attr('placeholder');
+    } else {
+      $input.removeClass('placeholder');
+    }
+  }
 
 }(this, document, jQuery));
 
@@ -286,7 +286,7 @@
             regExp = /^\w+$/;
             break;
           case 'email':
-            regExp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+            regExp = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
             break;
           case 'url':
             val = new RegExp( '(https?|s?ftp|git)', 'i' ).test( val ) ? val : 'http://' + val;
@@ -808,11 +808,22 @@
       }
 
       // start validation process only if field has enough chars and validation never started
-      if ( !this.isRadioOrCheckbox && val.length < this.options.validationMinlength && !this.validatedOnce ) {
+      if ( !this.isRadioOrCheckbox && this.getLength(val) < this.options.validationMinlength && !this.validatedOnce ) {
         return true;
       }
 
       this.validate();
+    }
+
+    /**
+     * Get the length of a given value
+     *
+     * @method getLength
+     * @return {int} The length of the value
+     */
+    , getLength: function(val) {
+      if (!val || !val.hasOwnProperty('length')) return 0;
+      return val.length;
     }
 
     /**
@@ -951,6 +962,11 @@
         return false;
       }
 
+      // remove li error, and ul error if no more li inside
+      if ( this.ulError && $( this.ulError ).children().length === 0 ) {
+        this.removeErrors();
+      }
+
       return valid;
     }
 
@@ -981,11 +997,6 @@
         if ( that.ulError && $( that.ulError ).children().length === 0 ) {
           that.removeErrors();
         } } ) : $( liError ).remove();
-
-      // remove li error, and ul error if no more li inside
-      if ( this.ulError && $( this.ulError ).children().length === 0 ) {
-        this.removeErrors();
-      }
     }
 
     /**
@@ -1345,7 +1356,11 @@
         this.focusedField.focus();
       }
 
-      this.options.listeners.onFormSubmit( valid, event, this );
+      // if onFormSubmit returns (bool) false, form won't be submitted, even if valid
+      var onFormSubmit = this.options.listeners.onFormSubmit( valid, event, this );
+      if ('undefined' !== typeof onFormSubmit) {
+        return onFormSubmit;
+      }
 
       return valid;
     }
@@ -1466,7 +1481,7 @@
   $.fn.parsley.defaults = {
     // basic data-api overridable properties here..
     inputs: 'input, textarea, select'           // Default supported inputs.
-    , excluded: 'input[type=hidden], :disabled' // Do not validate input[type=hidden] & :disabled.
+    , excluded: 'input[type=hidden], input[type=file], :disabled' // Do not validate input[type=hidden] & :disabled.
     , trigger: false                            // $.Event() that will trigger validation. eg: keyup, change..
     , animate: true                             // fade in / fade out error messages
     , animateDuration: 300                      // fadein/fadout ms time
@@ -1489,7 +1504,7 @@
       }
     , listeners: {
         onFieldValidate: function ( elem, ParsleyForm ) { return false; } // Executed on validation. Return true to ignore field validation
-      , onFormSubmit: function ( isFormValid, event, ParsleyForm ) {}     // Executed once on form validation
+      , onFormSubmit: function ( isFormValid, event, ParsleyForm ) {}     // Executed once on form validation. Return (bool) false to block submit, even if valid
       , onFieldError: function ( elem, constraints, ParsleyField ) {}     // Executed when a field is detected as invalid
       , onFieldSuccess: function ( elem, constraints, ParsleyField ) {}   // Executed when a field passes validation
     }
@@ -1505,7 +1520,6 @@
 
 // This plugin works with jQuery or Zepto (with data extension built for Zepto.)
 }(window.jQuery || window.Zepto);
-
 window.ParsleyConfig = window.ParsleyConfig || {};
 
 (function ($) {
@@ -1513,33 +1527,40 @@ window.ParsleyConfig = window.ParsleyConfig || {};
     messages: {
       // parsley //////////////////////////////////////
         defaultMessage: "Este valor parece ser inválido."
-      , type: {
-            email: "Este valor debe ser un correo válido."
-          , url: "Este valor debe ser una URL válida."
-          , urlstrict: "Este valor debe ser una URL válida."
-          , number: "Este valor debe ser un número válido."
-          , digits: "Este valor debe ser un dígito válido."
-          , dateIso: "Este valor debe ser una fecha válida (YYYY-MM-DD)."
-          , alphanum: "Este valor debe ser alfanumérico."
+        , type: {
+            email:      "Este valor debe ser un correo válido."
+          , url:        "Este valor debe ser una URL válida."
+          , urlstrict:  "Este valor debe ser una URL válida."
+          , number:     "Este valor debe ser un número válido."
+          , digits:     "Este valor debe ser un dígito válido."
+          , dateIso:    "Este valor debe ser una fecha válida (YYYY-MM-DD)."
+          , alphanum:   "Este valor debe ser alfanumérico."
+          , phone:      "Este valor debe ser un número telefónico válido."
         }
-      , notnull: "Este valor no debe ser nulo."
-      , notblank: "Este valor no debe estar en blanco."
-      , required: "Este valor es requerido."
-      , regexp: "Este valor es incorrecto."
-      , min: "Este valor no debe ser menor que %s."
-      , max: "Este valor no debe ser mayor que %s."
-      , range: "Este valor debe estar entre %s y %s."
-      , minlength: "Este valor es muy corto. La longitud mínima es de %s caracteres."
-      , maxlength: "Este valor es muy largo. La longitud máxima es de %s caracteres."
-      , rangelength: "La longitud de este valor debe estar entre %s y %s caracteres."
-      , equalto: "Este valor debe ser idéntico."
+      , notnull:        "Este valor no debe ser nulo."
+      , notblank:       "Este valor no debe estar en blanco."
+      , required:       "Este valor es requerido."
+      , regexp:         "Este valor es incorrecto."
+      , min:            "Este valor no debe ser menor que %s."
+      , max:            "Este valor no debe ser mayor que %s."
+      , range:          "Este valor debe estar entre %s y %s."
+      , minlength:      "Este valor es muy corto. La longitud mínima es de %s caracteres."
+      , maxlength:      "Este valor es muy largo. La longitud máxima es de %s caracteres."
+      , rangelength:    "La longitud de este valor debe estar entre %s y %s caracteres."
+      , mincheck:       "Debe seleccionar al menos %s opciones."
+      , maxcheck:       "Debe seleccionar %s opciones o menos."
+      , rangecheck:     "Debe seleccionar entre %s y %s opciones."
+      , equalto:        "Este valor debe ser idéntico."
 
       // parsley.extend ///////////////////////////////
-      , minwords: "Este valor debe tener al menos %s palabras."
-      , maxwords: "Este valor no debe exceder las %s palabras."
-      , rangewords: "Este valor debe tener entre %s y %s palabras."
-      , greaterthan: "Este valor no debe ser mayor que %s."
-      , lessthan: "Este valor no debe ser menor que %s."
+      , minwords:       "Este valor debe tener al menos %s palabras."
+      , maxwords:       "Este valor no debe exceder las %s palabras."
+      , rangewords:     "Este valor debe tener entre %s y %s palabras."
+      , greaterthan:    "Este valor no debe ser mayor que %s."
+      , lessthan:       "Este valor no debe ser menor que %s."
+      , beforedate:     "Esta fecha debe ser anterior a %s."
+      , afterdate:      "Esta fecha debe ser posterior a %s."
+      , americandate:   "Este valor debe ser una fecha válida (MM/DD/YYYY)."
     }
   });
 }(window.jQuery || window.Zepto));

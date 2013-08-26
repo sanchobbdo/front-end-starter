@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-419">
 <head>
 <title>Título | Sancho BBDO HTML5</title>
 <!-- Meta Tags -->
@@ -31,54 +31,31 @@
 <link rel='stylesheet' href='assets/css/style.css'>
 
 <!--[if lt IE 9]>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <link media="screen" href="assets/css/ie.css" rel="stylesheet" />
 <![endif]-->
 
-
-        <!-- Hammer reload -->
-          <script>
-            setInterval(function(){
-              try {
-                if(typeof ws != 'undefined' && ws.readyState == 1){return true;}
-                ws = new WebSocket('ws://'+(location.host || 'localhost').split(':')[0]+':35353')
-                ws.onopen = function(){ws.onclose = function(){document.location.reload()}}
-                ws.onmessage = function(){
-                  var links = document.getElementsByTagName('link'); 
-                    for (var i = 0; i < links.length;i++) { 
-                    var link = links[i]; 
-                    if (link.rel === 'stylesheet' && !link.href.match(/typekit/)) { 
-                      href = link.href.replace(/((&|\?)hammer=)[^&]+/,''); 
-                      link.href = href + (href.indexOf('?')>=0?'&':'?') + 'hammer='+(new Date().valueOf());
-                    }
-                  }
-                }
-              }catch(e){}
-            }, 1000)
-          </script>
-        <!-- /Hammer reload -->
-      
-
 </head>
 <body>
 
-<header role="banner">
-	<nav role="navigation">
-	</nav>
+<header class="l-header" role="banner">
+  <nav class="nav" role="navigation">
+  </nav>
 </header>
 
 <section role="main">
-	<div class="l-container">
-		<!-- @todo Colocar el contenido aquí -->
-	</div>
+  <div class="l-container">
+    <!-- @todo Colocar el contenido aquí -->
+  </div>
 </section>
 
-<footer role="contentinfo"></footer>
+<footer role="contentinfo">
+  <div class="l-container"></div>
+</footer>
 
 <!-- Obtiene jQuery del CDN de Google, con opción a cargarlo de un archivo local  -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.10.1.min.js"><\/script>')</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 <!-- Scripts concatenados y minificados -->
 <script src='assets/js/plugins.js'></script>
 <script src='assets/js/app.js'></script>
@@ -87,12 +64,16 @@
 <script src="https://rawgithub.com/philipwalton/html-inspector/master/dist/html-inspector.js"></script>
 <script> HTMLInspector.inspect() </script>
 
+<!-- START ANALYTICS -->
 <!-- Google Analytics: cambie UA-XXXXX-X por el ID del sitio. -->
 <script>
-    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-    g.src='//www.google-analytics.com/ga.js';
-    s.parentNode.insertBefore(g,s)}(document,'script'));
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+    function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+    e.src='//www.google-analytics.com/analytics.js';
+    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-XXXXX-X');ga('send','pageview');
 </script>
+<!-- END ANALYTICS -->
 </body>
 </html>

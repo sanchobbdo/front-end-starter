@@ -19,5 +19,4 @@ Características
 - [Placeholder.js](http://mths.be/placeholder) se incluye para activar el atributo ```placeholder``` en los navegadores que no lo soportan.
 - [Parsley.js](http://parsleyjs.org/) se incluye para validar formularios.
 - [HTML Inspector](https://github.com/philipwalton/html-inspector) para validar el código HTML.
-- Incluye Template para [Hammer](http://hammerformac.com/).
 - Licencia MIT.
